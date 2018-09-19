@@ -1,0 +1,69 @@
+<!-- views/server.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>MyFreeTeamSpeak</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Server Page</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <a href="/profile" class="btn btn-default btn-sm">Profile</a>
+    </div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="col-sm-6">
+                                <!-- show any messages that come back with authentication -->
+                                <% if (message.length > 0) { %>
+                                    <div class="alert alert-danger"><%= JSON.stringify(message) %></div>
+                                <% } %>
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Manage Server</h3>
+
+                    <p>
+                        <form action="/server" method="post">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" name="startstop" value="stop">
+                            </div>
+                    
+                            <button type="submit" class="btn btn-warning btn-lg">Stop Server</button>
+                        </form>
+                        <form action="/server" method="post">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" name="startstop" value="start">
+                            </div>
+                    
+                            <button type="submit" class="btn btn-warning btn-lg">Start Server</button>
+                        </form>
+                    </p>
+
+            </div>
+            <div class="well">
+                <h3><span class="fa fa-user"></span>Server Administration</h3>
+
+    <!-- SERVER FORM -->
+    <form action="/server" method="post">
+        <div class="form-group">
+            <label>Server Command</label>
+            <input type="text" class="form-control" name="startstop">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg">Execute</button>
+    </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

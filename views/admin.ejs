@@ -1,0 +1,75 @@
+<% if (user.local.isAdmin > 0) { %>
+<!-- views/admin.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>MyFreeTeamSpeak</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Server Admin Page</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <a href="/profile" class="btn btn-default btn-sm">Profile</a>
+    </div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="col-sm-6">
+                                <!-- show any messages that come back with authentication -->
+                                <% if (message.length > 0) { %>
+                                    <div class="alert alert-danger"><%= JSON.stringify(message) %></div>
+                                <% } %>
+            <!-- Add Server Form -->
+            <div class="well">
+                <h3><span class="fa fa-user"></span>Server Administration</h3>
+
+    <!-- SERVER FORM -->
+    <form action="/admin" method="post">
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" name="location">
+            <label>IPV4 Address</label>
+            <input type="text" class="form-control" name="ip">
+            <label>QueryPort</label>
+            <input type="text" class="form-control" name="queryport">
+            <label>ServerAdmin</label>
+            <input type="text" class="form-control" name="serveradmin">
+            <label>Password</label>
+            <input type="text" class="form-control" name="password">
+            <label>Max Servers</label>
+            <input type="text" class="form-control" name="maxServers">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg">Add Server</button>
+    </form>
+            </div>
+    <!-- SERVER COMMAND FORM -->
+            <div class="well">
+                <h3><span class="fa fa-user"></span>Server Administration</h3>
+
+
+    <form action="/admin" method="post">
+        <div class="form-group">
+            <label>Server Command</label>
+            <input type="text" class="form-control" name="startstop">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg">Execute Command</button>
+    </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
+<%} %>

@@ -1,0 +1,97 @@
+<% if (sinfo.length > 0) { %>
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>MyFreeTeamSpeak</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <style>
+        body        { padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+                                <!-- show any messages that come back with authentication -->
+                                <% if (message.length > 0) { %>
+                                    <div class="alert alert-danger"><%= JSON.stringify(message) %></div>
+                                <% } %>
+    <div class="jumbotron text-center">
+        <h1><span class="fa fa-lock"></span> MyFreeTeamSpeak</h1>
+
+        <p>Login or Register with:</p>
+
+        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+    </div>
+
+</div>
+</body>
+</html>
+
+<%} %>
+
+<% if (sinfo.length == 0) { %>
+    <!-- No Server Detected -->
+    <!-- views/admin.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>MyFreeTeamSpeak - Setup</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+    <center></center>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Server Setup Page</h1>
+    </div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="col-sm-6">
+                                <!-- show any messages that come back with authentication -->
+                                <% if (message.length > 0) { %>
+                                    <div class="alert alert-danger"><%= JSON.stringify(message) %></div>
+                                <% } %>
+            <!-- Add Server Form -->
+            <div class="well">
+                <h3><span class="fa fa-user"></span>Server Setup</h3>
+
+    <!-- SERVER FORM -->
+    <form action="/" method="post">
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" name="location">
+            <label>IPV4 Address</label>
+            <input type="text" class="form-control" name="ip">
+            <label>QueryPort</label>
+            <input type="text" class="form-control" name="queryport">
+            <label>ServerAdmin</label>
+            <input type="text" class="form-control" name="serveradmin">
+            <label>Password</label>
+            <input type="text" class="form-control" name="password">
+            <label>Max Servers(Non Functioning Atm, still inserts into DB)</label>
+            <input type="text" class="form-control" name="maxServers">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg">Add Server</button>
+    </form>
+            </div>
+         
+        </div>
+
+    </div>
+
+</div>
+</center>
+</body>
+</html>
+
+ <%} %>
