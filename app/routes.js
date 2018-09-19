@@ -126,15 +126,31 @@ module.exports = function(app, passport) {
             ts3.on("ready", () => {
                 ts3.useByPort(req.user.local.port).then(function(result){
                     ts3.serverInfo().then(function(result){
-                        //console.log(result.virtualserver_clientsonline);
-                        ts3.quit().then(function(da){
+                        ts3.privilegekeyList().then(function(keys){
+                            ts3.quit().then(function(da){
                                 //console.log(da) disconnection true
                                 res.render('profile.ejs',{
                                     user : req.user,
-                                    infoServer  : result
+                                    infoServer  : result,
+                                    tokenInfo   : keys
                                 })
                         }).catch(e => console.log("CATCHED", e.message))
-                        //console.log("server id: " + result.server_id)
+
+                        }).catch(function(error){
+                            if (error.message == "sql empty result set, empty!"){
+                                ts3.quit().then(function(da){
+                                    //console.log(da) disconnection true
+                                    res.render('profile.ejs',{
+                                        user : req.user,
+                                        infoServer  : result,
+                                        tokenInfo   : "No Keys Available"
+                                    })
+                            }).catch(e => console.log("CATCHED", e.message))
+                            }
+                            else{
+                            console.log("Report this error to jetfox", error)
+                            }
+                        })
                     }).catch(e => console.log("CATCHED", e.message))
                 }).catch(e => console.log("CATCHED", e.message))
 

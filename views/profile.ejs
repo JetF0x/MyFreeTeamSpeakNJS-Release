@@ -42,7 +42,11 @@
                         <strong>ip</strong>: <%= user.local.ip %><br>
                         <strong>port</strong>: <%= user.local.port %><br>
                         <strong>Online Users</strong>: <%= infoServer.virtualserver_clientsonline %> / <%= infoServer.virtualserver_maxclients %><br>
-                        <strong>token</strong>: <%= user.local.servertoken %><br>
+                        <strong>tokens</strong>: <br>
+                        <% for(var i = 0; i < tokenInfo.length; i++) { %>
+                            <li><%= tokenInfo[i].token %></li>
+                          <% } %>
+                         %><br>
                     </div>
         </div>
 
