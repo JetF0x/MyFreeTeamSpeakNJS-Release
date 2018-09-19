@@ -129,10 +129,13 @@ module.exports = function(app, passport) {
                         ts3.privilegekeyList().then(function(keys){
                             ts3.quit().then(function(da){
                                 //console.log(da) disconnection true
+                                //console.log(Array.isArray(keys))
+                                var arraydetect = Array.isArray(keys);
                                 res.render('profile.ejs',{
                                     user : req.user,
                                     infoServer  : result,
-                                    tokenInfo   : keys
+                                    tokenInfo   : keys,
+                                    arraydetect : arraydetect
                                 })
                         }).catch(e => console.log("CATCHED", e.message))
 

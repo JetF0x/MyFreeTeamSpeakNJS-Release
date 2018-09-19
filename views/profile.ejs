@@ -43,9 +43,14 @@
                         <strong>port</strong>: <%= user.local.port %><br>
                         <strong>Online Users</strong>: <%= infoServer.virtualserver_clientsonline %> / <%= infoServer.virtualserver_maxclients %><br>
                         <strong>tokens</strong>: <br>
-                        <% for(var i = 0; i < tokenInfo.length; i++) { %>
+                        <% if (tokenInfo == "No Keys Available"){ %>
+                            No Keys Availablea
+                        <%} else if (arraydetect == false) { %>
+                            <li> <%= tokenInfo.token %> </li>
+                        <%} else {
+                         for(var i = 0; i < tokenInfo.length; i++) { %>
                             <li><%= tokenInfo[i].token %></li>
-                          <% } %>
+                          <% }} %>
                          %><br>
                     </div>
         </div>
