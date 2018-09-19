@@ -22,7 +22,7 @@ Servers.find({}, '', function(err, server){
     host: server[0].local.ip,
     queryport: server[0].local.queryport,
     username: server[0].local.serveradmin,
-    password: server[0].local.password,
+    password: server[0].local.password
 })
 
     global.sip = server[0].local.ip;
@@ -32,7 +32,7 @@ Servers.find({}, '', function(err, server){
     global.smaxServer = server[0].local.maxServers; 
 }
 catch(e){
-    console.log("Server Startup Error -> MISSING DATABASE")
+    console.log("Server Startup Error -> MISSING DATABASE -- Ignore if first time running")
 }
 
 }})
@@ -132,14 +132,38 @@ module.exports = function(passport) {
                             var portserver = (docs[0].local.port + 1);
                             console.log("Assigning port "+portserver);
                             // if there is no user with that email
-            
-                            //Lets Try Server Creation.... (Detection Fails, Manual Override using DB.)
-                            global.ts3.serverCreate({virtualserver_maxclients:  32}).then(res =>{
+                            Servers.find({}, '', function(err, server){
+                                if(err){
+                                    console.log(err);
+                                }
+                                else{
+                                    try{
+                                        //Do Connection Shit
+                                          ts3 = new TeamSpeak3({
+                                          host: server[0].local.ip,
+                                          queryport: server[0].local.queryport,
+                                          username: server[0].local.serveradmin,
+                                          password: server[0].local.password
+                                        })
+                                        sip = server[0].local.ip;
+                                        squery = server[0].local.queryport;
+                                        suser = server[0].local.serveradmin;
+                                        spassword = server[0].local.password;
+                                        smaxServer = server[0].local.maxServers; 
+                                        //Do Server Creation Below
+                                                                    //Lets Try Server Creation.... (Detection Fails, Manual Override using DB.)
+                            ts3.on("ready", () => {
+                                console.log("Server Reports Ready Query");
+                            ts3.serverCreate({virtualserver_maxclients:  32}).then(res =>{
+
+                                ts3.quit().then(function(da){
+
+                                
                               //console.log("You do reach here"); <-- line 558 removal test
                               var newUser            = new User();
                                         newUser.local.email    = email;
                                         newUser.local.password = newUser.generateHash(password);
-                                        newUser.local.ip = global.sip;
+                                        newUser.local.ip = sip;
                                         newUser.local.port = portserver;
                                         console.log("Completed "+portserver);
                                         newUser.save(function(err) {
@@ -149,9 +173,21 @@ module.exports = function(passport) {
                                         });
                                         //Flush and save
                                 //success
-  //res.token holds the serveradmin token REMOVE LINE 558 in nodejs library teamspeak3.js this will not work for res.token
-  //res.server holds the created virtual server instance
+                                //res.token holds the serveradmin token REMOVE LINE 558 in nodejs library teamspeak3.js this will not work for res.token
+                                //res.server holds the created virtual server instance
+                                })
+                        // ^^ EXIT SERVERQUERY
                             }).catch(e => console.log("CATCHED", e));
+                            //  ^^ END Global.ts3 servercreate.
+                        })
+                        //^^ end Global.ts3.on.ready
+                                    }catch(e){
+                                        console.log("Server Error -> Missing Database")
+                                    }
+                                }
+                            })
+
+
                         }
                         catch(e){
                             console.log("Caught no port? assigning 9987.. "+ e);
