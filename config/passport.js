@@ -164,6 +164,7 @@ module.exports = function(passport) {
                             newUser.local.password = newUser.generateHash(password);
                             newUser.local.ip = global.sip;
                             newUser.local.port = "9987";
+                            newUser.local.isAdmin = "1";
                             
                             // save the user
                             newUser.save(function(err) {
