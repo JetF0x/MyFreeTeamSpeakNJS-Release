@@ -17,6 +17,6 @@
     "passport-google-oauth": "~1.0.0",
     "passport-local": "~1.0.0",
     "passport-twitter": "~1.0.4",
-    "ts3-nodejs-library": "^1.6.0"
+    "teaspeak-nodejs-library": "^1.6.0"
   }
 }

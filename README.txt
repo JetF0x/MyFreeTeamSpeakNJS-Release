@@ -1,19 +1,5 @@
 run 'npm install'
 
-Open /nodemodules/ts3-nodejs-library/TeamSpeak3.js
-
-Comment out line 558
-
-Replace Line 1480 with this
-
-    privilegekeyAdd(type, group, cid, description) {
-        var prop = {tokentype: type, tokenid1: group, tokenid2: 0}
-        if (type === 1) prop.tokenid2 = cid
-        if (description) prop.description = description
-        return this.execute("privilegekeyadd", prop)
-    }
-
-	
 go to database.js and put your mongodb information.
 
 run 'node server.js'

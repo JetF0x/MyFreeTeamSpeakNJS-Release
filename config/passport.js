@@ -8,7 +8,7 @@ var User            = require('../app/models/user');
 //load up the server model
 var Servers            = require('../app/models/servers');
 // load up the teamspeak information
-const TeamSpeak3 = require("ts3-nodejs-library")
+const TeamSpeak3 = require("teaspeak-nodejs-library")
 
 
 Servers.find({}, '', function(err, server){

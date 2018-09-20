@@ -1,7 +1,7 @@
 // app/routes.js
 
 // load up the teamspeak information
-const TeamSpeak3 = require("ts3-nodejs-library")
+const TeamSpeak3 = require("teaspeak-nodejs-library")
 var User            = require('../app/models/user');
 var Servers            = require('../app/models/servers');
 
