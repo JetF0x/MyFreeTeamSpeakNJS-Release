@@ -37,12 +37,21 @@
                     
                             <button type="submit" class="btn btn-warning btn-lg">Stop Server</button>
                         </form>
+                        
                         <form action="/server" method="post">
                             <div class="form-group">
                                 <input type="hidden" class="form-control" name="startstop" value="start">
                             </div>
                     
                             <button type="submit" class="btn btn-warning btn-lg">Start Server</button>
+                        </form>
+
+                        <form action="/server" method="post">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" name="startstop" value="token">
+                            </div>
+                    
+                            <button type="submit" class="btn btn-warning btn-lg">Generate Token</button>
                         </form>
                     </p>
 

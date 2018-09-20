@@ -189,6 +189,11 @@ module.exports = function(app, passport) {
                     req.flash("serverMessage", { "success" : "Server Started" });
                     res.redirect("/server");
                 }
+                else if (startstopvar == "token"){
+                    startstop(startstopvar, req.user.local.port);
+                    req.flash("serverMessage", { "success" : "Token Generated" });
+                    res.redirect("/server");
+                }
                 else{
                     console.log("Attempted to call startstop with invalid command");
                     req.flash("serverMessage", { "failure" : "An Invalid Command Was Entered" });
@@ -312,6 +317,43 @@ function startstop(startorstop, port){
                 //console.log("server id: " + result.server_id)
             }).catch(e => console.log("CATCHED", e.message))
         })
+        //end start code
+        return;
+    }
+    else if (startorstop == "token"){
+        console.log("attempting to generate token on " + port);
+
+        ts3.on("ready", () => {
+            try{
+                ts3.useByPort(port).then(function(result){
+                    ts3.getServerGroupByName("Server Admin").then(function(res){
+                        ts3.privilegekeyAdd(0, res.getCache().sgid).then(function(t){
+                        ts3.quit().then(function(finished){
+                            console.log("Token Generated For Port:", port)
+                        }).catch(e => console.log("MAJOR DISCONNECTION ERROR", e))
+                        }).catch(e => console.log("CATCHED", e))
+                    }).catch(e => console.log("CATCHED", e))
+                }).catch(e => console.log("CATCHED", e))
+            }catch (e){
+                console.log("Catched", e)
+            }
+        })
+        
+
+        
+        //ts start
+        /*ts3.on("ready", () => {
+            ts3.useByPort(port).then(function(result){
+                ts3.getServerGroupByName("Server Admin").then(function(result){
+                    ts3.privilegekeyAdd(result._propcache.type, result._propcache.sgid).then(function(result){
+                        console.log("Token Added:")
+                        ts3.quit().then(function(da){
+                            console.log("Token Generator Disconnected")
+                        }).catch(e => console.log("CATCHED", e))
+                    }).catch(e => console.log("CATCHED", e))
+                }).catch(e => console.log("CATCHED, e.message"))
+            }).catch(e => console.log("CATCHED", e.message))
+        }) */
         //end start code
         return;
     }
