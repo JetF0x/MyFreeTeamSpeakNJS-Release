@@ -1,6 +1,6 @@
 run 'npm install'
 
-go to database.js and put your mongodb information.
+go to config & open database.js and put your mongodb information.
 
 run 'node server.js'
 
