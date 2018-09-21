@@ -12,6 +12,7 @@ Run `npm install`
 Create a database in mongodb.
 <br/><br/>
 Go to /config/database.js and put your mongodb information, it should look something like this:
+<br/><br/>
 'url' : 'mongodb://user:password@ip:port/databasename'
 
 ##### Documentation -> Soon
