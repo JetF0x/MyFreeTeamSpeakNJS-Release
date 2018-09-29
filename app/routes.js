@@ -123,7 +123,7 @@ module.exports = function(app, passport) {
                 console.log('Retrieved ', server.length, ' server/s from database')
                 //Create a new Connection
                 for (var i = 0, len = server.length; i < len; i++) {
-                    if(server[i].local.ip == req.user.ip){
+                    if(server[i].local.ip == req.user.local.ip){
                         ts3 = new TeamSpeak3({
                             host: server[i].local.ip,
                             queryport: server[i].local.queryport,
@@ -293,7 +293,7 @@ function startstop(startorstop, port){
             console.log('Retrieved ', server.length, ' server/s from database')
             //Create a new Connection
             for (var i = 0, len = server.length; i < len; i++) {
-                if(server[i].local.ip == req.user.ip){
+                if(server[i].local.ip == req.user.local.ip){
                     var ts3 = new TeamSpeak3({
                         host: server[i].local.ip,
                         queryport: server[i].local.queryport,
