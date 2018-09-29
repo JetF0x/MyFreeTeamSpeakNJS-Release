@@ -122,59 +122,55 @@ module.exports = function(app, passport) {
         
                 console.log('Retrieved ', server.length, ' server/s from database')
                 //Create a new Connection
-            ts3 = new TeamSpeak3({
-            host: server[0].local.ip,
-            queryport: server[0].local.queryport,
-            username: server[0].local.serveradmin,
-            password: server[0].local.password,
-        })
-
-            ts3.on("ready", () => {
-                ts3.useByPort(req.user.local.port).then(function(result){
-                    ts3.serverInfo().then(function(result){
-                        //console.log(result);
-                        ts3.clientList().then(function(clientList){
-                            //console.log(clientList['_propcache']);
-                        
-                        ts3.privilegekeyList().then(function(keys){
-                            ts3.quit().then(function(da){
-                                //console.log(da) disconnection true
-                                //console.log(Array.isArray(keys))
-                                var arraydetect = Array.isArray(keys);
-                                //console.log(clientList);
-                                res.render('profile.ejs',{
-                                    user : req.user,
-                                    infoServer  : result,
-                                    tokenInfo   : keys,
-                                    onlineClients   : clientList,
-                                    arraydetect : arraydetect
-                                })
-                        }).catch(e => console.log("CATCHED", e.message))
-
-                        }).catch(function(error){
-                            if (error.message == "sql empty result set, empty!"){
-                                ts3.quit().then(function(da){
-                                    //console.log(da) disconnection true
-                                    res.render('profile.ejs',{
-                                        user : req.user,
-                                        infoServer  : result,
-                                        tokenInfo   : "No Keys Available"
-                                    })
-                            }).catch(e => console.log("CATCHED", e.message))
-                            }
-                            else{
-                            console.log("Report this error to jetfox", error)
-                            }
+                for (var i = 0, len = server.length; i < len; i++) {
+                    if(server[i].local.ip == req.user.ip){
+                        ts3 = new TeamSpeak3({
+                            host: server[i].local.ip,
+                            queryport: server[i].local.queryport,
+                            username: server[i].local.serveradmin,
+                            password: server[i].local.password,
                         })
-                    }).catch(e => console.log("CATCHED", e.message))
-                }).catch(e => console.log("CATCHED", e.message))
-                }).catch(e => console.log("CATCHED", e.message))
-
-            })
-        }
-        
-        })
-        });
+                        ts3.on("ready", () => {
+                            ts3.useByPort(req.user.local.port).then(function(result){
+                                ts3.serverInfo().then(function(result){
+                                    //console.log(result);
+                                    ts3.clientList().then(function(clientList){
+                                        //console.log(clientList['_propcache']);
+                                    
+                                    ts3.privilegekeyList().then(function(keys){
+                                        ts3.quit().then(function(da){
+                                            //console.log(da) disconnection true
+                                            //console.log(Array.isArray(keys))
+                                            var arraydetect = Array.isArray(keys);
+                                            //console.log(clientList);
+                                            res.render('profile.ejs',{
+                                                user : req.user,
+                                                infoServer  : result,
+                                                tokenInfo   : keys,
+                                                onlineClients   : clientList,
+                                                arraydetect : arraydetect
+                                            })
+                                    }).catch(e => console.log("CATCHED", e.message))
+            
+                                    }).catch(function(error){
+                                        if (error.message == "sql empty result set, empty!"){
+                                            ts3.quit().then(function(da){
+                                                //console.log(da) disconnection true
+                                                res.render('profile.ejs',{
+                                                    user : req.user,
+                                                    infoServer  : result,
+                                                    tokenInfo   : "No Keys Available"
+                                                })
+                                        }).catch(e => console.log("CATCHED", e.message))
+                                        }
+                                        else{
+                                        console.log("Report this error to jetfox", error)
+                                        }
+                                    })
+                                }).catch(e => console.log("CATCHED", e.message))
+                            }).catch(e => console.log("CATCHED", e.message))
+                            }).catch(e => console.log("CATCHED", e.message))
+                        })}}}})});
 
 
     // =====================================
@@ -296,93 +292,79 @@ function startstop(startorstop, port){
             try{
             console.log('Retrieved ', server.length, ' server/s from database')
             //Create a new Connection
-        var ts3 = new TeamSpeak3({
-        host: server[0].local.ip,
-        queryport: server[0].local.queryport,
-        username: server[0].local.serveradmin,
-        password: server[0].local.password,
-    })
+            for (var i = 0, len = server.length; i < len; i++) {
+                if(server[i].local.ip == req.user.ip){
+                    var ts3 = new TeamSpeak3({
+                        host: server[i].local.ip,
+                        queryport: server[i].local.queryport,
+                        username: server[i].local.serveradmin,
+                        password: server[i].local.password,
+                    })
+                    if (startorstop == "stop"){
+                        console.log("attempting to stop " + port);
+                        //ts stop
+                        ts3.on("ready", () => {
+                            ts3.serverIdGetByPort(port).then(function(result){
+                                ts3.serverStop(result.server_id).then(function(result){
+                                    //console.log(JSON.stringify(result))
+                                    console.log("Stopped Server:" + port)
+                                }).catch(e => console.log("CATCHED", e.message))
+                                //console.log("server id: " + result.server_id)
+                            }).catch(e => console.log("CATCHED", e.message))
+                        })
+                        //end stop code
+                        return;
+                    }
+                     else if (startorstop == "start"){
+                        console.log("attempting to start " + port);
+                        //ts start
+                        ts3.on("ready", () => {
+                            ts3.serverIdGetByPort(port).then(function(result){
+                                ts3.serverStart(result.server_id).then(function(result){
+                                    //console.log(JSON.stringify(result))
+                                    console.log("Started Server:" + port)
+                                }).catch(e => console.log("CATCHED", e.message))
+                                //console.log("server id: " + result.server_id)
+                            }).catch(e => console.log("CATCHED", e.message))
+                        })
+                        //end start code
+                        return;
+                    }
+                    else if (startorstop == "token"){
+                        console.log("attempting to generate token on " + port);
+                
+                        ts3.on("ready", () => {
+                            try{
+                                ts3.useByPort(port).then(function(result){
+                                    ts3.getServerGroupByName("Server Admin").then(function(res){
+                                        ts3.privilegekeyAdd(0, res.getCache().sgid).then(function(t){
+                                        ts3.quit().then(function(finished){
+                                            console.log("Token Generated For Port:", port)
+                                        }).catch(e => console.log("MAJOR DISCONNECTION ERROR", e))
+                                        }).catch(e => console.log("CATCHED", e))
+                                    }).catch(e => console.log("CATCHED", e))
+                                }).catch(e => console.log("CATCHED", e))
+                            }catch (e){
+                                console.log("Catched", e)
+                            }
+                        })
+                        
+                        return;
+                    }
+                    else {
+                        console.log("attempted to call startstop with invalid command");
+                        return;
+                    }
 
-    if (startorstop == "stop"){
-        console.log("attempting to stop " + port);
-        //ts stop
-        ts3.on("ready", () => {
-            ts3.serverIdGetByPort(port).then(function(result){
-                ts3.serverStop(result.server_id).then(function(result){
-                    //console.log(JSON.stringify(result))
-                    console.log("Stopped Server:" + port)
-                }).catch(e => console.log("CATCHED", e.message))
-                //console.log("server id: " + result.server_id)
-            }).catch(e => console.log("CATCHED", e.message))
-        })
-        //end stop code
-        return;
-    }
-     else if (startorstop == "start"){
-        console.log("attempting to start " + port);
-        //ts start
-        ts3.on("ready", () => {
-            ts3.serverIdGetByPort(port).then(function(result){
-                ts3.serverStart(result.server_id).then(function(result){
-                    //console.log(JSON.stringify(result))
-                    console.log("Started Server:" + port)
-                }).catch(e => console.log("CATCHED", e.message))
-                //console.log("server id: " + result.server_id)
-            }).catch(e => console.log("CATCHED", e.message))
-        })
-        //end start code
-        return;
-    }
-    else if (startorstop == "token"){
-        console.log("attempting to generate token on " + port);
-
-        ts3.on("ready", () => {
-            try{
-                ts3.useByPort(port).then(function(result){
-                    ts3.getServerGroupByName("Server Admin").then(function(res){
-                        ts3.privilegekeyAdd(0, res.getCache().sgid).then(function(t){
-                        ts3.quit().then(function(finished){
-                            console.log("Token Generated For Port:", port)
-                        }).catch(e => console.log("MAJOR DISCONNECTION ERROR", e))
-                        }).catch(e => console.log("CATCHED", e))
-                    }).catch(e => console.log("CATCHED", e))
-                }).catch(e => console.log("CATCHED", e))
-            }catch (e){
-                console.log("Catched", e)
+                }
             }
-        })
-        
 
-        
-        //ts start
-        /*ts3.on("ready", () => {
-            ts3.useByPort(port).then(function(result){
-                ts3.getServerGroupByName("Server Admin").then(function(result){
-                    ts3.privilegekeyAdd(result._propcache.type, result._propcache.sgid).then(function(result){
-                        console.log("Token Added:")
-                        ts3.quit().then(function(da){
-                            console.log("Token Generator Disconnected")
-                        }).catch(e => console.log("CATCHED", e))
-                    }).catch(e => console.log("CATCHED", e))
-                }).catch(e => console.log("CATCHED, e.message"))
-            }).catch(e => console.log("CATCHED", e.message))
-        }) */
-        //end start code
-        return;
-    }
-    else {
-        console.log("attempted to call startstop with invalid command");
-        return;
-    }
-    
         }
         catch(e){
             console.log("Phase Server Detected Error #1");
         } 
     }
-    })
-
-    
+    })    
 }
 
 function addserver(location, ip, port, serveradmin, password, maxservers){
