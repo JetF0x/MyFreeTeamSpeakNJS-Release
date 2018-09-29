@@ -41,7 +41,14 @@
                     <p>
                         <strong>ip</strong>: <%= user.local.ip %><br>
                         <strong>port</strong>: <%= user.local.port %><br>
-                        <strong>Online Users</strong>: <%= infoServer.virtualserver_clientsonline %> / <%= infoServer.virtualserver_maxclients %><br>
+                        <strong>Client Counts</strong>: <%= infoServer.virtualserver_clientsonline %> / <%= infoServer.virtualserver_maxclients %><br>
+                        <strong>Online Users</strong>:
+                        <%
+                        for(var i = 0; i < onlineClients.length; i++){
+                        %><li><%= onlineClients[i]._propcache.client_nickname %></li> <%
+                        }
+
+                        %>
                         <strong>tokens</strong>: <br>
                         <% if (tokenInfo == "No Keys Available"){ %>
                             No Keys Available

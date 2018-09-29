@@ -31,6 +31,18 @@
             <label>Password</label>
             <input type="password" class="form-control" name="password">
         </div>
+        <div class="form-group">
+            <label>Location</label>
+                <select name="location">
+            <%
+            for(var i = 0; i < server.length; i++){
+            %><option value=<%= server[i].local.location %>><%= server[i].local.location %></option>> <%
+            }
+    
+            %>
+                </select>
+        </div>
+
 
         <button type="submit" class="btn btn-warning btn-lg">Signup</button>
     </form>

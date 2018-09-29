@@ -35,6 +35,7 @@ module.exports = function(app, passport) {
                 //console.log('Retrieved servers ', server.length, server[0].local.location)
                 if (server.length > 0){
                     console.log("Some fucker tried adding another server, most likely an invalid server.");
+                    res.redirect("/");
                 }
                 else if (server.length == 0){
                     var startstopvar = req.param('startstop');
@@ -86,9 +87,14 @@ module.exports = function(app, passport) {
     // =====================================
     // show the signup form
     app.get('/signup', function(req, res) {
-
+        Servers.find({}, '', function(err, server){
         // render the page and pass in any flash data if it exists
-        res.render('signup.ejs', { message: req.flash('signupMessage') });
+        res.render('signup.ejs', { 
+            message: req.flash('signupMessage'),
+            server  :   server
+
+         });
+        })
     });
 
     // process the signup form
@@ -126,15 +132,21 @@ module.exports = function(app, passport) {
             ts3.on("ready", () => {
                 ts3.useByPort(req.user.local.port).then(function(result){
                     ts3.serverInfo().then(function(result){
+                        //console.log(result);
+                        ts3.clientList().then(function(clientList){
+                            //console.log(clientList['_propcache']);
+                        
                         ts3.privilegekeyList().then(function(keys){
                             ts3.quit().then(function(da){
                                 //console.log(da) disconnection true
                                 //console.log(Array.isArray(keys))
                                 var arraydetect = Array.isArray(keys);
+                                //console.log(clientList);
                                 res.render('profile.ejs',{
                                     user : req.user,
                                     infoServer  : result,
                                     tokenInfo   : keys,
+                                    onlineClients   : clientList,
                                     arraydetect : arraydetect
                                 })
                         }).catch(e => console.log("CATCHED", e.message))
@@ -155,6 +167,7 @@ module.exports = function(app, passport) {
                             }
                         })
                     }).catch(e => console.log("CATCHED", e.message))
+                }).catch(e => console.log("CATCHED", e.message))
                 }).catch(e => console.log("CATCHED", e.message))
 
             })
