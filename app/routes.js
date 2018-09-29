@@ -189,17 +189,17 @@ module.exports = function(app, passport) {
           app.post('/server', function(req, res){
             var startstopvar = req.param('startstop');
                 if (startstopvar == "stop"){
-                    startstop(startstopvar, req.user.local.port);
+                    startstop(startstopvar, req.user.local.port, req.user.local.ip);
                     req.flash("serverMessage", { "success" : "Server Stopped" });
                     res.redirect("/server");
                 }
                 else if (startstopvar == "start"){
-                    startstop(startstopvar, req.user.local.port);
+                    startstop(startstopvar, req.user.local.port, req.user.local.ip);
                     req.flash("serverMessage", { "success" : "Server Started" });
                     res.redirect("/server");
                 }
                 else if (startstopvar == "token"){
-                    startstop(startstopvar, req.user.local.port);
+                    startstop(startstopvar, req.user.local.port, req.user.local.ip);
                     req.flash("serverMessage", { "success" : "Token Generated" });
                     res.redirect("/server");
                 }
@@ -241,12 +241,12 @@ module.exports = function(app, passport) {
                         var serverpassword = req.param('password');
                         var maxservers = req.param('maxServers');
                 if (startstopvar == "stop"){
-                    startstop(startstopvar, req.user.local.port);
+                    startstop(startstopvar, req.user.local.port, req.user.local.ip);
                     req.flash("serverMessage", { "success" : "Server Stopped" });
                     res.redirect("/admin");
                 }
                 else if (startstopvar == "start"){
-                    startstop(startstopvar, req.user.local.port);
+                    startstop(startstopvar, req.user.local.port, req.user.local.ip);
                     req.flash("serverMessage", { "success" : "Server Started" });
                     res.redirect("/admin");
                 }
@@ -283,7 +283,7 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 }
 
-function startstop(startorstop, port){
+function startstop(startorstop, port, ip){
     //Create a new Connection
     Servers.find({}, '', function(err, server){
         if(err){
@@ -293,7 +293,7 @@ function startstop(startorstop, port){
             console.log('Retrieved ', server.length, ' server/s from database')
             //Create a new Connection
             for (var i = 0, len = server.length; i < len; i++) {
-                if(server[i].local.ip == req.user.local.ip){
+                if(server[i].local.ip == ip){
                     var ts3 = new TeamSpeak3({
                         host: server[i].local.ip,
                         queryport: server[i].local.queryport,
